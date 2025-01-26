@@ -21,7 +21,7 @@ public class Game() :
         })
 {
     private int _shaderProgram = 0;
-    
+
     private readonly float[] _vertices =
     [
         0.5F, 0.5F, 0.0F,
@@ -29,7 +29,7 @@ public class Game() :
         -0.5F, -0.5F, 0.0F,
         -0.5F, 0.5F, 0.0F
     ];
-        
+
     private readonly uint[] _indices =
     [
         0, 1, 3,
@@ -41,7 +41,7 @@ public class Game() :
         base.OnLoad();
 
         GL.Viewport(0, 0, 800, 600);
-        
+
         var vertexShader = 0;
         var fragmentShader = 0;
         {
@@ -75,7 +75,7 @@ public class Game() :
             GL.AttachShader(_shaderProgram, vertexShader);
             GL.AttachShader(_shaderProgram, fragmentShader);
             GL.LinkProgram(_shaderProgram);
-            
+
             GL.GetProgram(_shaderProgram, GetProgramParameterName.LinkStatus, out var success);
             if (success != 1)
             {
@@ -83,7 +83,7 @@ public class Game() :
                 Console.WriteLine($"Error while linking program: {str}");
             }
         }
-        
+
         GL.DeleteShader(vertexShader);
         GL.DeleteShader(fragmentShader);
     }
@@ -101,30 +101,30 @@ public class Game() :
 
         GL.ClearColor(0.2F, 0.3F, 0.3F, 1.0F);
         GL.Clear(ClearBufferMask.ColorBufferBit);
-        
+
         var vao = GL.GenVertexArray();
         var vbo = GL.GenBuffer();
         var ebo = GL.GenBuffer();
-        
+
         GL.BindVertexArray(vao);
-        
+
         GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
         GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Length * sizeof(float), _vertices,
             BufferUsageHint.StaticDraw);
-        
+
         GL.BindBuffer(BufferTarget.ElementArrayBuffer, ebo);
-        GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(float), _indices, 
+        GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(float), _indices,
             BufferUsageHint.StaticDraw);
-        
+
         GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
         GL.EnableVertexAttribArray(0);
-        
+
         GL.PolygonMode(TriangleFace.FrontAndBack, PolygonMode.Line);
         GL.UseProgram(_shaderProgram);
         GL.BindVertexArray(vao);
         GL.DrawElements(BeginMode.Triangles, 6, DrawElementsType.UnsignedInt, 0);
         GL.BindVertexArray(0);
-        
+
         SwapBuffers();
     }
 
